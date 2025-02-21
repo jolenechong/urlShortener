@@ -7,9 +7,13 @@ import CookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import pkg from 'pg';
+const { Pool } = pkg;
 
-// if (!process.env.MONGODB_URI) { throw new Error("MONGODB_URI not set in environment!"); }
-// connect(process.env.MONGODB_URI);
+// Initialize PostgreSQL pool
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,7 +38,7 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html')));
 } else if (process.env.NODE_ENV === 'development') {
     const feProxy = proxy("http://localhost:5173", {
-        proxyReqPathResolver: (req) => url.parse(req.originalUrl).path || ""
+        proxyReqPathResolver: (req) => new URL(req.originalUrl, `http://${req.headers.host}`).pathname || ""
     });
     app.use(feProxy);
 }
@@ -43,3 +47,5 @@ if (process.env.NODE_ENV === 'production') {
 const httpServer = http.createServer(app);
 
 httpServer.listen(PORT, () => console.log(`Server is listening on Port ${PORT}\nVisit http://localhost:3001 to view app`));
+
+export default pool;
