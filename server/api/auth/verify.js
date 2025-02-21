@@ -4,10 +4,7 @@
  * 
  */
 
-import verifyToken from "./verifyToken";
-
-const { JWT_SECRET } = process.env;
-if (!JWT_SECRET) { throw new Error("JWT_SECRET not set in environment!"); }
+import verifyToken from "./verifyToken.js";
 
 async function verify(req, res, next) {
 

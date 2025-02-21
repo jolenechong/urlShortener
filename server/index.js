@@ -2,7 +2,6 @@ import http from "http";
 import express from "express";
 import dotenv from "dotenv";
 import proxy from "express-http-proxy";
-import url from "url";
 import CookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from "url";
@@ -12,7 +11,11 @@ const { Pool } = pkg;
 
 // Initialize PostgreSQL pool
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    user: "postgres",
+    host: "localhost",
+    database: "urlShorternerDB",
+    password: "admin",
+    port: 5432
 });
 
 const __filename = fileURLToPath(import.meta.url);

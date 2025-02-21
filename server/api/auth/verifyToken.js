@@ -2,30 +2,28 @@
  * /api/auth/verifyToken.ts
  * Helper function to verify JWT Token
  * 
- * Created by Jolene Chong
  */
 
-import { User, UserModel } from "../../models/user.model";
 import jwt from "jsonwebtoken";
-
-const { JWT_SECRET } = process.env;
-if (!JWT_SECRET) { throw new Error("JWT_SECRET not set in environment!"); }
+import pool from "../../index.js";
 
 async function verifyToken(token) {
 
-    // const decode = jwt.verify(token, JWT_SECRET!) as UserModel;
+    try {
+        const decode = jwt.verify(token, process.env.JWT_SECRET) || false;
+        if (!decode) { return false; }
 
-    // if (!decode) { return false; }
-    // let user = await User.findOne({ _id: decode.id });
-    // const user_update = {"id": user?._id,
-    //     "name": user?.name,
-    //     "email": user?.email,
-    //     "count": user?.count
-    // }
-    // if (!user) {user_update === null}
-    // return user_update || false;
+        // check decode email
+        if (!decode.email || decode.email == "") { return false; }
 
-    return false;
+        let user = await pool.query("SELECT * FROM users WHERE email = $1", [decode.email]);
+        if (user.rows.length == 0) { return false; }
+
+        return user.rows[0] || false;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
 
 }
 
