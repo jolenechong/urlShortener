@@ -8,7 +8,7 @@ async function shorten(req, res) {
     const path = generateRandomString();
     const user_id = req.body.auth.ui.id;
     const created_at = new Date();
-    const short_url = `http://localhost:3001/${path}`; // hard save domain for now
+    const short_url = `http://localhost:3001/access/${path}`; // hard save domain for now
 
     // save the original URL and the shortened URL to the postgres database
     try {

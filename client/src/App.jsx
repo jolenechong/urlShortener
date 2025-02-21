@@ -10,6 +10,7 @@ function App() {
     <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/access/:accessLink" element={<Home />} />
           <Route path="*" element={<NotFound/>}/>
         </Routes>
       </Router>
