@@ -18,6 +18,8 @@ function LoginModal() {
             email,
             password,
         }, {headers: {'content-type': 'application/json' }}).then(({ data }) => {
+
+            console.log(data)
             setError(data.message)
 
             if (!data.message){
@@ -28,7 +30,7 @@ function LoginModal() {
             }
             
         }).catch(({ response }) => {
-            console.log(response)
+            setError(response.data.message)
         });
     }
   

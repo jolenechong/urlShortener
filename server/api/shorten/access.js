@@ -6,6 +6,8 @@ async function access(req, res) {
 
     // save the original URL and the shortened URL to the postgres database
     try {
+
+        console.log("ACCESSED URL: ", url);
         
         // get long_url from urls table with short_url
         const result = await pool.query(

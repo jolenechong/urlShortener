@@ -45,7 +45,7 @@ function SignUpModal() {
   return (
     <>
     <h1>Sign Up</h1>
-    <p style={{'fontSize':'0.875rem', 'color':'#a7a7a7', 'paddingTop':'5px'}}>Sign Up to never do the same puzzle again, refresh page while retaining your current progress and more!</p>
+    <p style={{'fontSize':'0.875rem', 'color':'#a7a7a7', 'paddingTop':'5px'}}>Sign Up to start getting your shorter links! (no password requirements and no email checking for simplicity of testing)</p>
 
     <label htmlFor="email">Email</label>
     <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}/>

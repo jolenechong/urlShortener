@@ -10,11 +10,11 @@ async function login(req, res) {
 
     // Check if user with email exists with pool
     const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-    if (!user.rows[0]) { return res.status(403).end("Email and Password combination is incorrect"); }
+    if (!user.rows[0]) { return res.status(403).json({"message": "Email and Password combination is incorrect"}); }
 
     // Check if password is valid
     const isPasswordValid = await bcrypt.compare(password, user.rows[0].password);
-    if (!isPasswordValid) { return res.status(403).end("Email and Password combination is incorrect"); }
+    if (!isPasswordValid) { return res.status(403).json({"message": "Email and Password combination is incorrect"}); }
 
     const token = jwt.sign({ id: user.rows[0].id, email: user.rows[0].email }, process.env.JWT_SECRET);
 

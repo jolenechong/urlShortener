@@ -10,7 +10,7 @@
     background-color: rgba(0, 0, 0, 0.4);
 
     & div{
-        background-color: var(--bg-color);
+        background-color: #000;
         border-radius: 20px;
         color: var(--txt-color);
         margin: auto;
@@ -56,7 +56,7 @@
 
     .close:hover,
     .close:focus {
-        color: #000;
+        color: #a0a0a0;
         text-decoration: none;
         cursor: pointer;
     }

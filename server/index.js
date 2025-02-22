@@ -9,15 +9,6 @@ import { dirname } from "path";
 import pkg from 'pg';
 const { Pool } = pkg;
 
-// Initialize PostgreSQL pool
-const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "urlShorternerDB",
-    password: "admin",
-    port: 5432
-});
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -50,5 +41,87 @@ if (process.env.NODE_ENV === 'production') {
 const httpServer = http.createServer(app);
 
 httpServer.listen(PORT, () => console.log(`Server is listening on Port ${PORT}\nVisit http://localhost:3001 to view app`));
+
+// initialize db here so the application works on fresh start
+// Initialize database creation logic
+async function initializeDatabase() {
+    const defaultPool = new Pool({
+        user: "postgres",
+        host: "localhost",
+        database: "postgres", // Initially connect to the default database
+        password: "admin",
+        port: 5432
+    });
+
+    const client = await defaultPool.connect();
+    
+    // Create the database if it doesn't exist
+    try {
+        // Check if the database exists
+        const res = await client.query("SELECT 1 FROM pg_database WHERE datname = 'urlshorternerdb'");
+        
+        if (res.rowCount === 0) {
+            await client.query("CREATE DATABASE urlshorternerdb");
+            console.log('Database created.');
+        } else {
+            console.log('Database already exists.');
+        }
+    } catch (err) {
+        console.error('Error creating database:', err);
+    } finally {
+        client.release();
+    }
+
+    // Now connect to the newly created database
+    const newPool = new Pool({
+        user: "postgres",
+        host: "localhost",
+        database: "urlshorternerdb", // Target the newly created database
+        password: "admin",
+        port: 5432
+    });
+
+    const dbClient = await newPool.connect();
+    
+    try {
+        // Create tables if they don't exist
+        await dbClient.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                email TEXT UNIQUE,
+                password TEXT NOT NULL
+            );
+        `);
+
+        await dbClient.query(`
+            CREATE TABLE IF NOT EXISTS urls (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL,
+                long_url TEXT NOT NULL,
+                short_url TEXT NOT NULL UNIQUE,
+                click_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+        `);
+
+        console.log("Tables 'users' and 'urls' are ready.");
+    } catch (err) {
+        console.error('Error creating tables:', err);
+    } finally {
+        dbClient.release();
+    }
+}
+
+// Initialize the database and tables
+initializeDatabase().catch((err) => console.error("Error initializing database:", err));
+
+const pool = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "urlshorternerdb", // Target the newly created database
+    password: "admin",
+    port: 5432
+});
 
 export default pool;
