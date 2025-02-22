@@ -4,10 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npm install && npm run initEnv && npm run dev",
-    "server": "cd server && nodemon index.js",
+    "start": "npm i && npm run clientinstall && npm run dev",
+    "server": "cd server && cross-env NODE_ENV=development JWT_SECRET=secret nodemon index.js",
     "client": "npm start --prefix client",
-    "initEnv": "echo 'NODE_ENV=development\nJWT_SECRET=secret' > .env",
     "clientinstall": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
@@ -29,6 +28,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "express-http-proxy": "^2.1.1",
     "nodemon": "^3.1.9"
   }
