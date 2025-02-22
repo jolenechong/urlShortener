@@ -4,9 +4,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npm install && npm run dev",
+    "start": "npm install && npm run initEnv && npm run dev",
     "server": "cd server && nodemon index.js",
     "client": "npm start --prefix client",
+    "initEnv": "echo 'NODE_ENV=development\nJWT_SECRET=secret' > .env",
     "clientinstall": "npm install --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
