@@ -4,7 +4,7 @@ import { SharedArray } from 'k6/data';
 
 // Environment variables for flexibility
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:3001/api';
-const JWT_TOKEN = __ENV.JWT_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqb2xlbmVAZ21haWwuY29tIiwiaWF0IjoxNzQwMzIzMDY5fQ.wNI2EdDqE3cJND1yMkr8xYmlb3SB2f-oJPovM9JVlHg';  // Replace with a valid token
+const JWT_TOKEN = __ENV.JWT_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqb2xlbmVAZ21haWwuY29tIiwiaWF0IjoxNzQwMzUyNDA1fQ.2D064eg8fkqGDJev_OfvqMAG_f1fjAOZIKhQ1PcyUPc';  // Replace with a valid token
 
 // Test configuration
 export const options = {

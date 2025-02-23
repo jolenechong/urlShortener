@@ -9,20 +9,26 @@ Here's a quick demo on the features of the app and how the app works:
 https://github.com/user-attachments/assets/5a18540d-34e2-458b-85c3-a068300c6876
 
 ## Usage
+Pre-requisites (please ensure you have the following installed):
+- Node.js
+- PostgreSQL and pgAdmin
+- k6 (for load testing)
+
+Run the Application:
 ```bash
 npm run start # run the program, installs libraries and starts front and backend
-k6 run ./tests/load_test.js # run load tests
+k6 run ./tests/load_test.js # run load tests (update JWT token in the script when necessary)
 ```
 
 ## Architecture
 #### The Database
 Based on the requirements, I first thought about the database and quickly came up with the following schema.
-![Database UML Diagram](./assets/image.png)
+![Database UML Diagram](./assets/database.png)
 
 #### The Backend
-After connecting the front and backend with a proxy, I initialized the database with pgAdmin and started working on the rough frontend. Then, for the backend, there are routes to access (access the long link via short link, which the frontend uses to redirect), get (get all links) and shorten (given a url, and a signed in user, it returns a shortened url) There's also rate limiting on the backend to prevent abuse of the service.
+After connecting the front and backend with a proxy, I initialized the database with pgAdmin and started working on the rough frontend. Then, for the backend, there are routes to access (access the long link via short link, which the frontend uses to redirect), get (get all links) and shorten (given a url, and a signed in user, it returns a shortened url). 
 
-I also implemented JWT Authentication as I thought it is crucial for any site with users. This was implemented with bcrypt to store the hashed passwords in the database and jwt to authenticate users. I also handled error handling as well though minimally (more detailed errors could be better).
+I also implemented JWT Authentication as I thought it is crucial for any site with users. This was implemented with bcrypt to store the hashed passwords in the database and jwt to authenticate users.
 
 Why JWT?
 - Stateless (easily authenticate user, without relying on server-side sessions)
@@ -32,6 +38,9 @@ Why JWT?
 The JWT Authentication was implemented as a middleware and on routes such as /api/shorten and not on /api/all and /api/access. This is because the user does not need to be authenticated to access the shortened links or get all the links. However, the user needs to be authenticated to shorten a link so that we can draw a one-to-many relation with the URLs table as a user.
 
 Some considerations:
+- Used pgAdmin to manage the database
+- Used Postman to test the backend before connecting it to the frontend
+- Database is initialised automatically within ./server/index.js
 - Preferring async/await for readability
 - Wrapping calls to the database in try/catch
 - Reducing calls to the database by using a single query to get all the links (when generating new link)
@@ -46,17 +55,23 @@ Some considerations:
 - Used React Contexts to handle global state (user authentication, modals etc)
 - Used React Router to handle routing
 - Used Axios to handle requests to the backend
-- Separated files into respective folders with components for reusabilitiy
+- I also handled error handling as well though minimally (more detailed errors could be better).
+- Separated files into respective folders and components for reusabilitiy
 - NOT FOUND page for 404 errors
 
 #### The Load Testing
 I used K6 to run load tests on the backend. I created a script at `./tests/load_test.js` that sends 100 requests to the /api/shorten endpoint, which I was able to run with all requests successful. However, I wasn't able to run the full 500,000 URL shortening requests at the same time scenario on my laptop.
 
+![Screenshot of Load Testing](./assets/load_test.png)
+
 #### Potential Improvements
 - Caching frequently requested shortened URls to reduce load on backend with Redis to reduce load on database and improve performance
-- Dockerize the application and use Kubernetes with Horizontal Pod Autoscaling and Load Balancers for scaling the application which would add more pods during high periods of traffic, use the load_test.js script to test the application
+- Dockerize the application and use Kubernetes with Horizontal Pod Autoscaling and Load Balancers for scaling the application which would add more pods during high periods of traffic, use the load_test.js script to test the application with 500,000 URL shortening requests
 - Implement a CI/CD pipeline with Github Actions to automate the deployment process (which could also have the load_test.js script run to check if application works as expected)
-- Implement a more detailed error handling system with more descriptive error messages
+- More extensively test if errors could possibly occur and handle them, especially with edge cases
+- Implement mobile optimisation and a more detailed error handling system with more descriptive error messages
+- Use lazy loading and code splitting in the frontend to improve initial load times
+- Use Joi to validate API input and prevent SQL  injection and XSS attacks
 
 ## Contact
 Jolene - [jolenechong7@gmail.com](mailto:jolenechong7@gmail.com) <br>

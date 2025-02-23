@@ -1,8 +1,12 @@
 import Axios from "axios";
 
-const baseURLDev = `http://${window.location.hostname}:3001`
-const baseURLProd = window.location.href
+const baseURL = process.env.NODE_ENV === "development"
+    ? `http://${window.location.hostname}:3001`
+    : "https://your-production-url.com"; // replace with actual production URL
 
-export default Axios.create({
+const api = Axios.create({
+    baseURL,
     withCredentials: true
 });
+
+export default api;
