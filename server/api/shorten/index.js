@@ -7,7 +7,7 @@ import verify from "../auth/verify.js";
 const router = Router();
 
 router.post("/shorten", verify, shorten);
-router.post("/access", verify, access);
+router.post("/access", access);
 router.get("/all", get);
 
 export default router;
