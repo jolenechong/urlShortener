@@ -1,0 +1,50 @@
+services: 
+  back-end:
+    build: 
+      context: ./
+    container_name: back-end
+    working_dir: /
+    networks: 
+      - node-network
+    volumes: 
+      - ./server:/
+      - /node_modules
+    tty: true
+    ports: 
+      - "3001:3001"
+    command: npm run start
+    depends_on:
+       - db
+
+  front-end:
+    build: 
+      context: ./client
+    container_name: front-end
+    working_dir: /
+    networks: 
+      - node-network
+    volumes: 
+      - ./client:/
+      - /node_modules
+    tty: true
+    ports: 
+      - "5173:5173"
+    command: npm run start
+
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment: 
+      - POSTGRES_PASSWORD=1234
+    ports: 
+      - "5432:5432"
+    networks: 
+      - node-network
+
+networks: 
+  node-network:
+    driver: bridge

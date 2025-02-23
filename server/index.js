@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import pkg from 'pg';
 const { Pool } = pkg;
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,6 +38,12 @@ if (process.env.NODE_ENV === 'production') {
     app.use(feProxy);
 }
 
+setInterval(() => {
+    const usage = process.cpuUsage();
+    
+    console.log(`CPU: ${(usage.user + usage.system) / 1e6} ms`);
+    console.log(`RAM: ${(os.totalmem() - os.freemem()) / (1024 ** 3)} GB`);
+  }, 5000);
 // front end and backend will be running on 3001
 const httpServer = http.createServer(app);
 

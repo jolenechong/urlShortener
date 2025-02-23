@@ -6,6 +6,12 @@ async function shorten(req, res) {
 
     // generate a 5 character path of alphanumerics for the shortened URL
     const path = generateRandomString();
+
+    // check if auth exists
+    if (!req.body.auth || !req.body.auth.ui || !req.body.auth.ui.id) {
+        return res.status(401).end("Unauthorized");
+    }
+
     const user_id = req.body.auth.ui.id;
     const created_at = new Date();
     const short_url = `http://localhost:3001/access/${path}`; // hard save domain for now
