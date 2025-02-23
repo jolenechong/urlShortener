@@ -5,7 +5,7 @@ UrlShortener is a PERN (PostgreSQL, Express, React, Node.js) Full-Stack Web Appp
 Date: 23rd February 2024
 
 Here's a quick demo on the features of the app and how the app works:
-
+https://github.com/user-attachments/assets/5a18540d-34e2-458b-85c3-a068300c6876
 
 Run the program with `npm run start`
 
