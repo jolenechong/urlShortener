@@ -42,12 +42,12 @@ Some considerations:
 - Containerized the Application with Docker and configured Nginx as reverse proxy
 - Used pgAdmin to manage the database
 - Used Postman to test the backend before connecting it to the frontend
-- Database is initialised automatically within ./server/index.js
+- Database and schema is initialised automatically within ./server/index.js
 - Preferring async/await for readability
 - Wrapping calls to the database in try/catch
 - Reducing calls to the database by using a single query to get all the links (when generating new link)
 - Attempted to handle all possible scenarios/cases where errors could occur
-- Environmental Variables were used, so cross-env was used in the package.json file to ensure that the environment variables are set correctly in all environments (ideally the actual secrets shouldn't be there but I couldn't find a work around such that it works with a single command)
+- Environmental Variables were used, they're set in docker-compose (ideally should not be public since there's the JWT_TOKEN)
 - Files are organized into the type of API eg. /auth for authentication, /shorten for working with the links
 
 #### The Frontend
