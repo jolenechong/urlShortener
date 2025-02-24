@@ -10,6 +10,7 @@ import Header from '../components/home/Header.jsx';
 
 function Home() {
 
+    const [ui, setUI] = useContext(UserContext);
     const { modalInfo, dispatchModalEvent } = useContext(ModelContext);
     const [links, setLinks] = useState([]);
     const [link, setLink] = useState(""); // keep track of short link
@@ -61,7 +62,7 @@ function Home() {
                         <p className="pb-4 text-white">Shorten extra-long links today!</p>
                     </div>
                     <div className="p-4 w-full flex justify-center">
-                        <ShortenForm onShorten={handleShorten} />
+                        <ShortenForm onShorten={handleShorten} dispatchModalEvent={dispatchModalEvent} ui={ui} />
                     </div>
                     <div className="p-4">
                         {link && <p className="text-white">Shortened URL: <a href={link} target="_blank" rel="noreferrer">{link}</a></p>}

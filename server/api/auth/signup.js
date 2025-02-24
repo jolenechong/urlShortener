@@ -14,7 +14,7 @@ async function signup(req, res) {
     try {
 
         const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
-        if (user.rows[0]) { return res.status(409).end("Email already in use."); }
+        if (user.rows[0]) { return res.status(409).json({"message":"Email already in use."}).end(); }
 
         const passwordEncrypt = bcrypt.hashSync(password, 10);
 

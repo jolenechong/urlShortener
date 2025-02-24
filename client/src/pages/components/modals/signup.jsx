@@ -23,7 +23,7 @@ function SignUpModal() {
             confirmPassword
         }, {headers: {'content-type': 'application/json' }}).then(({ data }) => {
             setError(data.message)
-
+            console.log(data.message)
 
             if (!data.message){
                 dispatchModalEvent('close')
@@ -34,6 +34,7 @@ function SignUpModal() {
             
         }).catch(({ response }) => {
             console.log(response)
+            setError(response.data.message)
         });
 
         setName("")

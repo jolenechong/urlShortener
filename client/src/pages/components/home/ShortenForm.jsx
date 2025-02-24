@@ -1,13 +1,12 @@
 import { useState, useContext } from 'react';
-import { UserContext, withUserContext } from '../../../contexts/user-context';
 
-export default function ShortenForm({ onShorten }) {
-    const [ui, setUI] = useContext(UserContext);
+function ShortenForm({ ui, onShorten, dispatchModalEvent }) {
     const [llink, setLLink] = useState(''); // keep track of long link
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!ui.isAuthenticated) return dispatchModalEvent('openSignup');
+        console.log(ui);
+        if (ui == null || !ui.isAuthenticated) return dispatchModalEvent('openSignup');
         if (!llink.trim()) return;
         onShorten(llink);
         setLLink('');
@@ -39,3 +38,5 @@ export default function ShortenForm({ onShorten }) {
         </form>
     );
 }
+
+export default ShortenForm;
