@@ -2,6 +2,7 @@
 import pool from "../../index.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import keys from "./../../keys.js";
 
 async function signup(req, res) {
 
@@ -23,7 +24,8 @@ async function signup(req, res) {
             [email, passwordEncrypt]
         );
         
-        const token = jwt.sign({ id: newUser.rows[0].id, email: newUser.rows[0].email }, process.env.JWT_SECRET);
+        if (!keys.jwtSecret) { return res.status(500).json({"message": "Missing Secret"}); }
+        const token = jwt.sign({ id: newUser.rows[0].id, email: newUser.rows[0].email }, keys.jwtSecret);
 
         res.cookie('token', token);
 

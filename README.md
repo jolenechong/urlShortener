@@ -10,13 +10,14 @@ https://github.com/user-attachments/assets/5a18540d-34e2-458b-85c3-a068300c6876
 
 ## Usage
 Pre-requisites (please ensure you have the following installed):
-- Node.js
-- PostgreSQL and pgAdmin
-- k6 (for load testing)
+- Docker
 
 Run the Application:
 ```bash
-npm run start # run the program, installs libraries and starts front and backend
+docker-compose up --build # starts program in docker container, go to http://localhost:3050/
+
+# to run load testing on server
+cd server && npm run dev # start server
 k6 run ./tests/load_test.js # run load tests (update JWT token in the script when necessary)
 ```
 
@@ -38,6 +39,7 @@ Why JWT?
 The JWT Authentication was implemented as a middleware and on routes such as /api/shorten and not on /api/all and /api/access. This is because the user does not need to be authenticated to access the shortened links or get all the links. However, the user needs to be authenticated to shorten a link so that we can draw a one-to-many relation with the URLs table as a user.
 
 Some considerations:
+- Containerized the Application with Docker and configured Nginx as reverse proxy
 - Used pgAdmin to manage the database
 - Used Postman to test the backend before connecting it to the frontend
 - Database is initialised automatically within ./server/index.js
@@ -66,7 +68,7 @@ I used K6 to run load tests on the backend. I created a script at `./tests/load_
 
 #### Potential Improvements
 - Caching frequently requested shortened URls to reduce load on backend with Redis to reduce load on database and improve performance
-- Dockerize the application and use Kubernetes with Horizontal Pod Autoscaling and Load Balancers for scaling the application which would add more pods during high periods of traffic, use the load_test.js script to test the application with 500,000 URL shortening requests
+- Use Kubernetes with Horizontal Pod Autoscaling and Load Balancers for scaling the application which would add more pods during high periods of traffic, use the load_test.js script to test the application with 500,000 URL shortening requests
 - Implement a CI/CD pipeline with Github Actions to automate the deployment process (which could also have the load_test.js script run to check if application works as expected)
 - More extensively test if errors could possibly occur and handle them, especially with edge cases
 - Implement mobile optimisation and a more detailed error handling system with more descriptive error messages

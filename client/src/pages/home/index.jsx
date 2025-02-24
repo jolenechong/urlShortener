@@ -35,7 +35,7 @@ function Home() {
         const controller = new AbortController(); // To cancel request if needed
 
         api.post("/api/access",
-            { url: `http://localhost:3001/access/${accessLink}` },
+            { url: `http://localhost:3050/access/${accessLink}` },
             { signal: controller.signal }
         )
             .then(({ data }) => {

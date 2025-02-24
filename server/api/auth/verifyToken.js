@@ -6,11 +6,12 @@
 
 import jwt from "jsonwebtoken";
 import pool from "../../index.js";
+import keys from "./../../keys.js";
 
 async function verifyToken(token) {
 
     try {
-        const decode = jwt.verify(token, process.env.JWT_SECRET) || false;
+        const decode = jwt.verify(token, keys.jwtSecret) || false;
         if (!decode) { return false; }
 
         // check decode email

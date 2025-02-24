@@ -31,7 +31,7 @@ async function shorten(req, res) {
     let path;
     do {
         path = generateRandomString();
-        short_url = `http://localhost:3001/access/${path}`;
+        short_url = `http://localhost:3050/access/${path}`;
 
         // save the original URL and the shortened URL to the postgres database
         try {

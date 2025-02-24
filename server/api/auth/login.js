@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import pool from "../../index.js";
+import keys from "./../../keys.js";
 
 async function login(req, res) {
 
@@ -16,7 +17,8 @@ async function login(req, res) {
     const isPasswordValid = await bcrypt.compare(password, user.rows[0].password);
     if (!isPasswordValid) { return res.status(403).json({"message": "Email and Password combination is incorrect"}); }
 
-    const token = jwt.sign({ id: user.rows[0].id, email: user.rows[0].email }, process.env.JWT_SECRET);
+    if (!keys.jwtSecret) { return res.status(500).json({"message": "Missing Secret"}); }
+    const token = jwt.sign({ id: user.rows[0].id, email: user.rows[0].email }, keys.jwtSecret);
 
     res.cookie('token', token);
 
